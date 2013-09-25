@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JPhysics.Unity.Editor", "JPhysics.Unity.Editor\JPhysics.Unity.Editor.csproj", "{8A7BFBF3-59C8-44E3-A82C-E4E6251500E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JPhysics", "JPhysics\JPhysics.csproj", "{AA03EF1A-94F7-4D30-AB14-2092863FF923}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8A7BFBF3-59C8-44E3-A82C-E4E6251500E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A7BFBF3-59C8-44E3-A82C-E4E6251500E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A7BFBF3-59C8-44E3-A82C-E4E6251500E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A7BFBF3-59C8-44E3-A82C-E4E6251500E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA03EF1A-94F7-4D30-AB14-2092863FF923}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA03EF1A-94F7-4D30-AB14-2092863FF923}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA03EF1A-94F7-4D30-AB14-2092863FF923}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA03EF1A-94F7-4D30-AB14-2092863FF923}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
