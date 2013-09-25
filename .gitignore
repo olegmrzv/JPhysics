@@ -109,3 +109,4 @@ UpgradeLog*.XML
 
 Unity3d/Temp/*
 Unity3d/Library/*
+Unity3d/Build/*

@@ -1,6 +1,6 @@
 ﻿namespace JPhysics.Unity.Editor
 {
-    public class Class1
+    public class JBoxColliderEditor
     {
     }
 }
