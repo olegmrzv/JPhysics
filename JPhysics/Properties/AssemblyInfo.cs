@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Jitter")]
-[assembly: AssemblyProduct("Jitter")]
+[assembly: AssemblyTitle("JPhysics")]
+[assembly: AssemblyProduct("JPhysics")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyCopyright("Copyright © Thorben Linneweber 2011")]
+[assembly: AssemblyCopyright("Copyright © Thorben Linneweber & Benjamin Moore 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -29,4 +29,4 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("0.1.7.0")]
+[assembly: AssemblyVersion("0.0.*")]

@@ -60,6 +60,8 @@
         private int smallIterations = 4;
         private float timestep;
 
+        public World() : this(new CollisionSystemSAP()) {}
+
         public World(CollisionSystem collision)
         {
             if (collision == null)

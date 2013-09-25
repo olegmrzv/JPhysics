@@ -97,12 +97,17 @@
     <Compile Include="ResourcePool.cs" />
     <Compile Include="Dynamics\SoftBody.cs" />
     <Compile Include="ThreadManager.cs" />
+    <Compile Include="Unity\JBoxCollider.cs" />
     <Compile Include="Unity\JExtendens.cs" />
     <Compile Include="Unity\JPhysics.cs" />
+    <Compile Include="Unity\JRigidbody.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(TargetPath)" "$(SolutionDir)Unity3d\Assets\Code\" /Y /I /Q</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
