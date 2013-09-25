@@ -11,7 +11,7 @@
 
         static DateTime now;
         const int Wait = 10;
-        const int Steps = 60;
+        const int Steps = 70;
 
         static JPhysics()
         {

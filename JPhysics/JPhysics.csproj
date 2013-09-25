@@ -40,8 +40,9 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.ServiceModel" />
-    <Reference Include="UnityEngine">
-      <HintPath>..\..\..\Program Files (x86)\Unity\Editor\Data\Managed\UnityEngine.dll</HintPath>
+    <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\BuildLibs\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
@@ -97,6 +98,8 @@
     <Compile Include="ResourcePool.cs" />
     <Compile Include="Dynamics\SoftBody.cs" />
     <Compile Include="ThreadManager.cs" />
+    <Compile Include="Unity\Aides\DebugInfo.cs" />
+    <Compile Include="Unity\Aides\Hudfps.cs" />
     <Compile Include="Unity\JBoxCollider.cs" />
     <Compile Include="Unity\JExtendens.cs" />
     <Compile Include="Unity\JPhysics.cs" />
