@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 // If this assembly is the startup assembly, the following Guid is used to
 // uniquely identify the title storage container when deploying this assembly
 // to the Xbox 360 console.
-[assembly: Guid("ecccaa6a-c420-4638-8408-2babbcf23082")]
+[assembly: Guid("ecccaa6a-c420-4638-8408-2bab3cf23082")]
 
 // Version information for an assembly consists of the following four values:
 //
