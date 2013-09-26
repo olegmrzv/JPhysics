@@ -3,7 +3,7 @@
     using UnityEditor;
     using UnityEngine;
 
-    //WARNING: This code is taken from UnityEditor, only God himself knows how it works
+    //WARNING: This code is taken from UnityEditor, only God knows how it works
 
     internal class BoxEditor
     {

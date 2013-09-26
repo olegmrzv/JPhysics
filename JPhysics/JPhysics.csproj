@@ -100,6 +100,7 @@
     <Compile Include="ThreadManager.cs" />
     <Compile Include="Unity\Aides\DebugInfo.cs" />
     <Compile Include="Unity\Aides\Hudfps.cs" />
+    <Compile Include="Unity\JAssistant.cs" />
     <Compile Include="Unity\JBoxCollider.cs" />
     <Compile Include="Unity\JExtendens.cs" />
     <Compile Include="Unity\JPhysics.cs" />

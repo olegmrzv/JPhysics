@@ -16,10 +16,10 @@
 
         public override void OnInspectorGUI()
         {
-            base.serializedObject.Update();
+            serializedObject.Update();
             EditorGUILayout.PropertyField(isStatic, new GUILayoutOption[0]);
             EditorGUILayout.PropertyField(mass, new GUILayoutOption[0]);
-            base.serializedObject.ApplyModifiedProperties();
+            serializedObject.ApplyModifiedProperties();
         }
     }
 }

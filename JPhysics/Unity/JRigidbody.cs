@@ -14,10 +14,10 @@
         public RigidBody Body;
         public Shape Shape;
 
-        readonly Vector3 v = new Vector3();
-        readonly Quaternion q = new Quaternion();
         Vector3 lastPosition;
         Quaternion lastRotation;
+
+        const float LerpCof = 0.25f;
 
         void Start()
         {
@@ -30,27 +30,30 @@
                 IsStatic = IsStatic,
                 Mass = Mass
             };
-            JPhysics.AddBody(Body);
+            JPhysics.AddBody(Body, TransformCallback);
         }
 
         void Update()
         {
             var pos = transform.position;
             var rot = transform.rotation;
-            if (lastPosition != pos)
-            {
-                Body.position = pos.ConvertToJVector();
-                Body.inactiveTime = 0.0f;
-            }
-            if (lastRotation != rot)
-            {
-                Body.orientation = rot.ConvertToJMatrix();
-                Body.inactiveTime = 0.0f;
-            }
+            //if (lastPosition != pos && lastRotation != rot)
+            //{
+            //    Body.Position = pos.ConvertToJVector();
+            //    Body.Orientation = rot.ConvertToJMatrix();
+            //    Body.inactiveTime = 0.0f;
+            //}
 
-            if (!Body.IsActive) return;
-            lastPosition = transform.position = Body.Position.ConvertToVector3(v);
-            lastRotation = transform.rotation = Body.Orientation.ConvertToQuaternion(q);
+            //if (!Body.IsActive) return;
+
+                transform.position = Vector3.Lerp(pos, lastPosition, LerpCof);
+                transform.rotation = Quaternion.Lerp(rot, lastRotation, LerpCof);
+        }
+
+        void TransformCallback(Vector3 p, Quaternion r)
+        {
+            lastPosition = p;
+            lastRotation = r;
         }
 
         public void AddForce()

@@ -2,13 +2,14 @@
 {
     using UnityEngine;
 
-    public class Hudfps : MonoBehaviour
+    [AddComponentMenu("JPhysics/Aides/HUD FPS")]
+    class Hudfps : MonoBehaviour
     {
         public float UpdateInterval = 0.5F;
 
-        private float accum;
-        private int frames;
-        private float timeleft;
+        float accum;
+        int frames;
+        float timeleft;
 
         void Start()
         {

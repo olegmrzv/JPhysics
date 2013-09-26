@@ -3,6 +3,7 @@
     using Collision.Shapes;
     using UnityEngine;
 
+    [AddComponentMenu("JPhysics/Box Collider")]
     public sealed class JBoxCollider : JRigidbody
     {
         public Vector3 Size = Vector3.one;
