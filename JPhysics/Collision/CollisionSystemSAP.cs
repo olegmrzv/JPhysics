@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using Dynamics;
     using LinearMath;
     using Shapes;
@@ -48,16 +49,19 @@
 
         public override void Detect(bool multiThreaded)
         {
-            bodyList.Sort(xComparer);
 
+            bodyList.Sort(xComparer);
             active.Clear();
             if (multiThreaded)
             {
+
                 foreach (var b in bodyList)
                 {
                     AddToActiveMultithreaded(b);
                 }
+
                 threadManager.Execute();
+
             }
             else
             {
@@ -154,8 +158,11 @@
         private void DetectCallback(object obj)
         {
             var pair = obj as BroadphasePair;
+
             base.Detect(pair.Entity1, pair.Entity2);
+
             BroadphasePair.Pool.GiveBack(pair);
+
         }
 
         private int Compare(IBroadphaseEntity body1, IBroadphaseEntity body2)

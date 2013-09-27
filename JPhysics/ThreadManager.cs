@@ -2,13 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Threading;
 
     public class ThreadManager
     {
         public const int ThreadsPerProcessor = 1;
-
-        private readonly int[] xBoxMap = new int[] { 1, 3, 4, 5 };
 
         private ManualResetEvent waitHandleA, waitHandleB;
         private ManualResetEvent currentWaitHandle;
@@ -37,14 +36,9 @@
             }
         }
 
-        private ThreadManager()
-        {
-        }
-
         private void Initialize()
         {
-
-            ThreadCount = System.Environment.ProcessorCount * ThreadsPerProcessor;
+            ThreadCount = Environment.ProcessorCount * ThreadsPerProcessor;
 
             threads = new Thread[ThreadCount];
             waitHandleA = new ManualResetEvent(false);
@@ -52,17 +46,17 @@
 
             currentWaitHandle = waitHandleA;
 
-            AutoResetEvent initWaitHandle = new AutoResetEvent(false);
+            var initWaitHandle = new AutoResetEvent(false);
 
-            for (int i = 1; i < threads.Length; i++)
+            for (var i = 1; i < threads.Length; i++)
             {
                 threads[i] = new Thread(() =>
                 {
+
                     initWaitHandle.Set();
                     ThreadProc();
-                });
+                }) {IsBackground = true};
 
-                threads[i].IsBackground = true;
                 threads[i].Start();
                 initWaitHandle.WaitOne();
             }
@@ -78,7 +72,6 @@
             waitingThreadCount = 0;
 
             currentWaitHandle.Set();
-            PumpTasks();
 
             while (waitingThreadCount < threads.Length - 1) Thread.Sleep(0);
 
@@ -88,7 +81,6 @@
             tasks.Clear();
             parameters.Clear();
         }
-
 
         public void AddTask(Action<object> task, object param)
         {
@@ -100,9 +92,11 @@
         {
             while (true)
             {
+
                 Interlocked.Increment(ref waitingThreadCount);
                 waitHandleA.WaitOne();
                 PumpTasks();
+
 
                 Interlocked.Increment(ref waitingThreadCount);
                 waitHandleB.WaitOne();
@@ -116,6 +110,7 @@
 
             while (currentTaskIndex < count)
             {
+
                 int taskIndex = currentTaskIndex;
 
                 if (taskIndex == Interlocked.CompareExchange(ref currentTaskIndex, taskIndex + 1, taskIndex)
@@ -123,7 +118,10 @@
                 {
                     tasks[taskIndex](parameters[taskIndex]);
                 }
+
             }
+
+
         }
 
     }

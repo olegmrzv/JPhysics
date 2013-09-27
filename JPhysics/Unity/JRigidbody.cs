@@ -14,10 +14,10 @@
         public RigidBody Body;
         public Shape Shape;
 
-        Vector3 lastPosition;
-        Quaternion lastRotation;
+        Vector3 lastPosition, lp, cp;
+        Quaternion lastRotation, lr, cr;
 
-        const float LerpCof = 0.25f;
+        const float LerpCof = 0.3f;
 
         void Start()
         {
@@ -37,17 +37,14 @@
         {
             var pos = transform.position;
             var rot = transform.rotation;
-            //if (lastPosition != pos && lastRotation != rot)
-            //{
-            //    Body.Position = pos.ConvertToJVector();
-            //    Body.Orientation = rot.ConvertToJMatrix();
-            //    Body.inactiveTime = 0.0f;
-            //}
-
-            //if (!Body.IsActive) return;
-
-                transform.position = Vector3.Lerp(pos, lastPosition, LerpCof);
-                transform.rotation = Quaternion.Lerp(rot, lastRotation, LerpCof);
+            if (lp != pos || lr != rot)
+            {
+                cp = pos;
+                cr = rot;
+                JPhysics.CorrectTransform(Body,Correct);
+            }
+            lp = transform.position = Vector3.Lerp(pos, lastPosition, LerpCof);
+            lr = transform.rotation = Quaternion.Lerp(rot, lastRotation, LerpCof);
         }
 
         void TransformCallback(Vector3 p, Quaternion r)
@@ -56,9 +53,14 @@
             lastRotation = r;
         }
 
-        public void AddForce()
+        void OnDestroy()
         {
-            
+            JPhysics.RemoveBody(Body);
+        }
+
+        object[] Correct()
+        {
+            return new[] {(object)cp, cr};
         }
     }
 }

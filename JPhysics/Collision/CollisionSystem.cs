@@ -182,14 +182,18 @@ namespace JPhysics.Collision
         #region public virtual void Detect(IBroadphaseEntity body1, IBroadphaseEntity body2)
         public virtual void Detect(IBroadphaseEntity entity1, IBroadphaseEntity entity2)
         {
+
             var rigidBody1 = entity1 as RigidBody;
             var rigidBody2 = entity2 as RigidBody;
+
 
             if (rigidBody1 != null)
             { 
                 if(rigidBody2 != null)
                 {
+
                     DetectRigidRigid(rigidBody1, rigidBody2);
+
                 }
                 else
                 {
@@ -201,16 +205,18 @@ namespace JPhysics.Collision
             {
                 var softBody1 = entity1 as SoftBody;
 
-                if(rigidBody2 != null)
+                if (rigidBody2 != null)
                 {
-                    if(softBody1 != null) DetectSoftRigid(rigidBody2,softBody1);
+                    if (softBody1 != null) DetectSoftRigid(rigidBody2, softBody1);
                 }
                 else
                 {
                     var softBody2 = entity2 as SoftBody;
-                    if(softBody1 != null && softBody2 != null) DetectSoftSoft(softBody1,softBody2);
+                    if (softBody1 != null && softBody2 != null) DetectSoftSoft(softBody1, softBody2);
                 }
             }
+
+
         }
 
         private ResourcePool<List<int>> potentialTriangleLists = new ResourcePool<List<int>>();
@@ -252,6 +258,7 @@ namespace JPhysics.Collision
 
         private void DetectRigidRigid(RigidBody body1, RigidBody body2)
         {
+
             bool b1IsMulti = (body1.Shape is Multishape);
             bool b2IsMulti = (body2.Shape is Multishape);
 
@@ -263,10 +270,12 @@ namespace JPhysics.Collision
 
             if (!b1IsMulti && !b2IsMulti)
             {
+
                 if (XenoCollide.Detect(body1.Shape, body2.Shape, ref body1.orientation,
                     ref body2.orientation, ref body1.position, ref body2.position,
                     out point, out normal, out penetration))
                 {
+
                     JVector point1, point2;
                     FindSupportPoints(body1, body2, body1.Shape, body2.Shape, ref point, ref normal, out point1, out point2);
                     RaiseCollisionDetected(body1, body2, ref point1, ref point2, ref normal, penetration);
@@ -293,6 +302,7 @@ namespace JPhysics.Collision
                     }
 
                 }
+
             }
             else if (b1IsMulti && b2IsMulti)
             {
@@ -434,6 +444,8 @@ namespace JPhysics.Collision
 
                 ms.ReturnWorkingClone();
             }
+
+
         }
 
         private void DetectSoftRigid(RigidBody rigidBody, SoftBody softBody)

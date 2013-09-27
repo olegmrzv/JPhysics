@@ -30,6 +30,8 @@ using JPhysics.Collision;
 
 namespace JPhysics.Dynamics
 {
+    using System.Runtime.CompilerServices;
+
     /// <summary>
     /// For easy access, Arbiters are stored in a Hashtable(ArbiterMap). 
     /// To find the Arbiter fortwo RigidBodies, build an ArbiterKey for the two bodies
@@ -132,6 +134,7 @@ namespace JPhysics.Dynamics
         /// <param name="body2">The second body.</param>
         /// <param name="arbiter">The arbiter which was found.</param>
         /// <returns>Returns true if the arbiter could be found, otherwise false.</returns>
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public bool LookUpArbiter(RigidBody body1, RigidBody body2,out Arbiter arbiter)
         {
             lookUpKey.SetBodies(body1, body2);
@@ -143,6 +146,7 @@ namespace JPhysics.Dynamics
             get { return dictionary.Values; }
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         internal void Add(ArbiterKey key, Arbiter arbiter)
         {
             dictionary.Add(key, arbiter);

@@ -7,7 +7,9 @@
 
     internal class BoxEditor
     {
+#pragma warning disable 649
         private int m_ControlIdHint;
+#pragma warning restore 649
         private bool m_UseLossyScale;
 
         public BoxEditor(bool useLossyScale)

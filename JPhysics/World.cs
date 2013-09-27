@@ -64,8 +64,7 @@
 
         public World(CollisionSystem collision)
         {
-            if (collision == null)
-                throw new ArgumentNullException("collision", "The CollisionSystem can't be null.");
+            if (collision == null) throw new ArgumentNullException("collision", "The CollisionSystem can't be null.");
 
             arbiterCallback = ArbiterCallback;
             integrateCallback = IntegrateCallback;
@@ -104,7 +103,6 @@
         {
             get { return contactSettings; }
         }
-
 
         public List<CollisionIsland> Islands
         {
@@ -363,10 +361,9 @@
 
             sw.Reset();
             sw.Start();
-            double ms;
             while (removedArbiterQueue.Count > 0) islands.ArbiterRemoved(removedArbiterQueue.Dequeue());
             sw.Stop();
-            ms = sw.Elapsed.TotalMilliseconds;
+            var ms = sw.Elapsed.TotalMilliseconds;
 
             sw.Reset();
             sw.Start();
@@ -377,7 +374,6 @@
             }
             sw.Stop();
             debugTimes[(int) DebugType.ClothUpdate] = sw.Elapsed.TotalMilliseconds;
-
             sw.Reset();
             sw.Start();
             CollisionSystem.Detect(multithread);
@@ -650,28 +646,36 @@
             }
         }
 
+
+        //object locker = new object();
         private void CollisionDetected(RigidBody body1, RigidBody body2, JVector point1, JVector point2, JVector normal,
                                        float penetration)
         {
-            Arbiter arbiter = null;
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            Arbiter arbiter;
 
-            lock (arbiterMap)
+            sw.Start();
+            arbiterMap.LookUpArbiter(body1, body2, out arbiter);
+            sw.Stop();
+            if (arbiter == null)
             {
-                arbiterMap.LookUpArbiter(body1, body2, out arbiter);
-                if (arbiter == null)
-                {
-                    arbiter = Arbiter.Pool.GetNew();
-                    arbiter.body1 = body1;
-                    arbiter.body2 = body2;
-                    arbiterMap.Add(new ArbiterKey(body1, body2), arbiter);
 
-                    addedArbiterQueue.Enqueue(arbiter);
+                arbiter = Arbiter.Pool.GetNew();
+                arbiter.body1 = body1;
+                arbiter.body2 = body2;
+                arbiterMap.Add(new ArbiterKey(body1, body2), arbiter);
 
-                    events.RaiseBodiesBeginCollide(body1, body2);
-                }
+                addedArbiterQueue.Enqueue(arbiter);
+
+                events.RaiseBodiesBeginCollide(body1, body2);
             }
 
-            Contact contact = null;
+            UnityEngine.Debug.Log(sw.ElapsedMilliseconds);
+            sw.Reset();
+
+
+            Contact contact;
 
             if (arbiter.body1 == body1)
             {

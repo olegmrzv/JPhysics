@@ -123,6 +123,7 @@ namespace JPhysics.Dynamics
         internal RigidBody body1, body2;
         internal ContactList contactList;
 
+
         /// <summary>
         /// </summary>
         /// <param name="body1"></param>
