@@ -7,7 +7,7 @@
 
     public class ThreadManager
     {
-        public const int ThreadsPerProcessor = 1;
+        public static int ThreadsPerProcessor = 1;
 
         private ManualResetEvent waitHandleA, waitHandleB;
         private ManualResetEvent currentWaitHandle;

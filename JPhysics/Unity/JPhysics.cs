@@ -43,8 +43,10 @@
         static void SetValues()
         {
             Multithread = settings.Multithreading;
+            ThreadManager.ThreadsPerProcessor = settings.ThreadsPerProcessor;
             timestep = settings.Timestep;
             steps = settings.Steps;
+
         }
 
         static void Start()
