@@ -4,7 +4,7 @@
     using UnityEngine;
 
     [RequireComponent(typeof(TerrainCollider))]
-    public class JTerrain : JRigidbody
+    public abstract class JTerrain : JRigidbody
     {
         private void Awake()
         {
