@@ -384,7 +384,6 @@
             sw.Start();
 
             while (addedArbiterQueue.Count > 0) islands.ArbiterCreated(addedArbiterQueue.Dequeue());
-
             sw.Stop();
             debugTimes[(int) DebugType.BuildIslands] = sw.Elapsed.TotalMilliseconds + ms;
 
@@ -651,13 +650,9 @@
         private void CollisionDetected(RigidBody body1, RigidBody body2, JVector point1, JVector point2, JVector normal,
                                        float penetration)
         {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
             Arbiter arbiter;
 
-            sw.Start();
             arbiterMap.LookUpArbiter(body1, body2, out arbiter);
-            sw.Stop();
             if (arbiter == null)
             {
 
@@ -670,9 +665,6 @@
 
                 events.RaiseBodiesBeginCollide(body1, body2);
             }
-
-            UnityEngine.Debug.Log(sw.ElapsedMilliseconds);
-            sw.Reset();
 
 
             Contact contact;

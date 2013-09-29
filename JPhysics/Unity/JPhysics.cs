@@ -4,19 +4,19 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Threading;
-    using Collision;
     using Dynamics;
     using UnityEngine;
 
-    static class JPhysics
+    public static class JPhysics
     {
         public readonly static World World = new World();
         public static float TimeScale = 1f;
+        public static bool Multithread = true;
 
         static DateTime now;
 
-        const int Timestep = 15;
-        const int Steps = 75;
+        static float timestep = 15;
+        static int steps = 75;
 
         static readonly Vector3 V = new Vector3();
         static readonly Quaternion Q = new Quaternion();
@@ -25,17 +25,26 @@
 
         static readonly Thread thread;
         static readonly GameObject go;
-        static readonly Stopwatch sw = new Stopwatch(), sw2 = new Stopwatch();
+        static readonly Stopwatch sw = new Stopwatch();
 
-        public static bool Multithread;
+        static JSettings settings;
 
         static JPhysics()
         {
+            settings = Resources.Load("JSettings") as JSettings;
+            SetValues();
             go = new GameObject("JPhysics") {hideFlags = HideFlags.HideAndDontSave};
             var a = go.AddComponent<JAssistant>();
             a.OnApplicationExit += OnApplicationExit;
             a.StartEvent += Start;
             thread = new Thread(Logic) {IsBackground = true};
+        }
+
+        static void SetValues()
+        {
+            Multithread = settings.Multithreading;
+            timestep = settings.Timestep;
+            steps = settings.Steps;
         }
 
         static void Start()
@@ -47,16 +56,14 @@
         {
             while (true)
             {
-                var t = (int)(Timestep/TimeScale);
-                var del = (int)sw.ElapsedMilliseconds;
-                if (del > t) UnityEngine.Debug.LogWarning("Mode " + Multithread +" Physics calculation exceed timestep " + "Delta: " + del + "ms Timestep: " + t + "ms");
+                var t = timestep/TimeScale;
+                var del = (float)sw.ElapsedMilliseconds;
+                if (del > t) UnityEngine.Debug.LogWarning("Multithread " + Multithread +" Physics calculation exceed timestep " + "Delta: " + del + "ms Timestep: " + t + "ms");
                 sw.Reset();
-                Thread.Sleep(del < t ? t - del : 0);
-
+                Thread.Sleep((int)(del < t ? t - del : 0));
                 sw.Start();
-                //var mt = World.RigidBodies.Count > 500;
                 CorrectTransforms();
-                World.Step(1f / Steps, Multithread);
+                World.Step(1f / steps, Multithread);
                 UpdateTransforms();
                 sw.Stop();
             }

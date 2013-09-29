@@ -29,10 +29,10 @@
             Undo.SetSnapshotTarget(target, "Modified JBox Collider");
             var center = new Vector3();
             Vector3 size = target.Size;
-            var color = new Color(145f, 244f, 139f, 210f) / 255f;
+            var color = ColliderHandleColor;
             if (!target.enabled)
             {
-                color = new Color(84f, 200f, 77f, 140f) / 255f;
+                color = ColliderHandleColorDisabled;
             }
             if (boxEditor.OnSceneGUI(target.transform, color, ref center, ref size))
             {

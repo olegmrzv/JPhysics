@@ -8,6 +8,9 @@
         protected SerializedProperty isStatic;
         protected SerializedProperty mass;
 
+        protected static Color ColliderHandleColor = new Color(145f, 244f, 139f, 210f) / 255f;
+        protected static Color ColliderHandleColorDisabled = new Color(84f, 200f, 77f, 140f) / 255f;
+
         public virtual void OnEnable()
         {
             mass = serializedObject.FindProperty("Mass");

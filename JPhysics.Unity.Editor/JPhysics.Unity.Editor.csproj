@@ -50,8 +50,11 @@
   <ItemGroup>
     <Compile Include="BoxEditor.cs" />
     <Compile Include="JBoxColliderEditor.cs" />
+    <Compile Include="JMeshEditor.cs" />
     <Compile Include="JRigidbodyEditor.cs" />
+    <Compile Include="JSphereEditor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SettingsController.cs" />
     <Compile Include="Slider1D.cs" />
     <Compile Include="Slider2D.cs" />
   </ItemGroup>

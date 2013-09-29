@@ -100,14 +100,18 @@
     <Compile Include="ThreadManager.cs" />
     <Compile Include="Unity\Aides\DebugInfo.cs" />
     <Compile Include="Unity\Aides\Hudfps.cs" />
+    <Compile Include="Unity\JCapsule.cs" />
     <Compile Include="Unity\JAssistant.cs" />
     <Compile Include="Unity\JBoxCollider.cs" />
     <Compile Include="Unity\JExtendens.cs" />
+    <Compile Include="Unity\JMesh.cs" />
     <Compile Include="Unity\JPhysics.cs" />
     <Compile Include="Unity\JRigidbody.cs" />
+    <Compile Include="Unity\JSettings.cs" />
+    <Compile Include="Unity\JSphere.cs" />
+    <Compile Include="Unity\JTerrain.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(TargetPath)" "$(SolutionDir)Unity3d\Assets\Code\" /Y /I /Q</PostBuildEvent>
