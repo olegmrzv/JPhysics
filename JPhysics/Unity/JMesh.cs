@@ -7,12 +7,13 @@
     using LinearMath;
     using UnityEngine;
 
+    [AddComponentMenu("JPhysics/Colliders/JMesh")]
     [RequireComponent(typeof(MeshFilter))]
     public class JMesh : JRigidbody
     {
         public bool Convex;
 
-        void Awake()
+        protected override void Awake()
         {
             var mf = GetComponent<MeshFilter>();
             var mesh = mf.mesh;
@@ -33,7 +34,6 @@
                 for (var i = 0; i < count; i++)
                 {
                     var v = vertices[i];
-
                     v.x *= scale.x;
                     v.y *= scale.y;
                     v.z *= scale.z;
@@ -53,6 +53,7 @@
 
                 Shape = new TriangleMeshShape(octree);
             }
+            base.Awake();
         }
     }
 

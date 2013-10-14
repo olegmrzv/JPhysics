@@ -3,14 +3,15 @@
     using Collision.Shapes;
     using UnityEngine;
 
-    [AddComponentMenu("JPhysics/Box Collider")]
-    public sealed class JBoxCollider : JRigidbody
+    [AddComponentMenu("JPhysics/Colliders/JBox")]
+    public sealed class JBox : JRigidbody
     {
         public Vector3 Size = Vector3.one;
 
-        private void Awake()
+        protected override void Awake()
         {
             Shape = new BoxShape((Vector3.Scale(Size,transform.localScale).ConvertToJVector()));
+            base.Awake();
         }
     }
 }

@@ -157,11 +157,13 @@
 
         private void DetectCallback(object obj)
         {
+
+
             var pair = obj as BroadphasePair;
 
             base.Detect(pair.Entity1, pair.Entity2);
-
             BroadphasePair.Pool.GiveBack(pair);
+
 
         }
 

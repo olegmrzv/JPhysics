@@ -2,29 +2,17 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Threading;
+
+    //Some troubles with multithreading
 
     public class ThreadManager
     {
         public static int ThreadsPerProcessor = 1;
 
-        private ManualResetEvent waitHandleA, waitHandleB;
-        private ManualResetEvent currentWaitHandle;
-
-        internal volatile List<Action<object>> tasks = new List<Action<object>>();
-        internal volatile List<object> parameters = new List<object>();
-
-        private Thread[] threads;
-        private int currentTaskIndex, waitingThreadCount;
-
-        public int ThreadCount { get; internal set; }
-
-        static ThreadManager instance;
-
-        public static ThreadManager Instance 
-        { 
-            get 
+        public static ThreadManager Instance
+        {
+            get
             {
                 if (instance == null)
                 {
@@ -36,48 +24,62 @@
             }
         }
 
-        private void Initialize()
+        static ThreadManager instance;
+
+        public int ThreadCount { get; internal set; }
+
+        ManualResetEvent waitHandleA, waitHandleB, currentWaitHandle;
+        AutoResetEvent[] waitHandles;
+
+        volatile List<Action<object>> tasks = new List<Action<object>>();
+        volatile List<object> parameters = new List<object>();
+
+        Thread[] threads;
+        int currentTaskIndex;
+
+        void Initialize()
         {
             ThreadCount = Environment.ProcessorCount * ThreadsPerProcessor;
 
             threads = new Thread[ThreadCount];
+            waitHandles = new AutoResetEvent[ThreadCount];
             waitHandleA = new ManualResetEvent(false);
             waitHandleB = new ManualResetEvent(false);
+
+            for (var i = 0; i < waitHandles.Length; i++)
+            {
+                waitHandles[i] = new AutoResetEvent(false);
+            }
 
             currentWaitHandle = waitHandleA;
 
             var initWaitHandle = new AutoResetEvent(false);
 
-            for (var i = 1; i < threads.Length; i++)
+            for (var i = 0; i < threads.Length; i++)
             {
+                int i1 = i;
                 threads[i] = new Thread(() =>
                 {
-
                     initWaitHandle.Set();
-                    ThreadProc();
+                    ThreadProc(waitHandles[i1]);
                 }) {IsBackground = true};
 
                 threads[i].Start();
                 initWaitHandle.WaitOne();
             }
-
-
-
         }
 
 
         public void Execute()
         {
             currentTaskIndex = 0;
-            waitingThreadCount = 0;
 
             currentWaitHandle.Set();
 
-            while (waitingThreadCount < threads.Length - 1) Thread.Sleep(0);
+            WaitHandle.WaitAll(waitHandles);
 
             currentWaitHandle.Reset();
             currentWaitHandle = (currentWaitHandle == waitHandleA) ? waitHandleB : waitHandleA;
-
             tasks.Clear();
             parameters.Clear();
         }
@@ -88,39 +90,32 @@
             parameters.Add(param);
         }
 
-        private void ThreadProc()
+        void ThreadProc(EventWaitHandle wait)
         {
             while (true)
             {
-
-                Interlocked.Increment(ref waitingThreadCount);
                 waitHandleA.WaitOne();
                 PumpTasks();
+                wait.Set();
 
-
-                Interlocked.Increment(ref waitingThreadCount);
                 waitHandleB.WaitOne();
                 PumpTasks();
+                wait.Set();
             }
         }
 
-        private void PumpTasks()
+        void PumpTasks()
         {
             var count = tasks.Count;
 
             while (currentTaskIndex < count)
             {
-
-                int taskIndex = currentTaskIndex;
+                var taskIndex = currentTaskIndex;
 
                 if (taskIndex == Interlocked.CompareExchange(ref currentTaskIndex, taskIndex + 1, taskIndex)
-                    && taskIndex < count)
-                {
-                    tasks[taskIndex](parameters[taskIndex]);
-                }
+                    && taskIndex < count) tasks[taskIndex](parameters[taskIndex]);
 
             }
-
 
         }
 

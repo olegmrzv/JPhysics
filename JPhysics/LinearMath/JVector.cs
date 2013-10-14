@@ -661,14 +661,13 @@ namespace JPhysics.LinearMath
         /// <param name="value1">The vector to scale.</param>
         /// <param name="value2">The scale factor.</param>
         /// <returns>Returns the scaled vector.</returns>
-        #region public static JVector operator *(JVector value1, float value2)
         public static JVector operator *(JVector value1, float value2)
         {
             JVector result;
-            JVector.Multiply(ref value1, value2,out result);
+            Multiply(ref value1, value2,out result);
+
             return result;
         }
-        #endregion
 
         /// <summary>
         /// Multiplies a vector by a scale factor.

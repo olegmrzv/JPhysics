@@ -38,12 +38,15 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Mono.Simd">
+      <HintPath>..\..\Libs\Mono.Simd.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\BuildLibs\UnityEngine.dll</HintPath>
-      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -101,8 +104,7 @@
     <Compile Include="Unity\Aides\DebugInfo.cs" />
     <Compile Include="Unity\Aides\Hudfps.cs" />
     <Compile Include="Unity\JCapsule.cs" />
-    <Compile Include="Unity\JAssistant.cs" />
-    <Compile Include="Unity\JBoxCollider.cs" />
+    <Compile Include="Unity\JBox.cs" />
     <Compile Include="Unity\JExtendens.cs" />
     <Compile Include="Unity\JMesh.cs" />
     <Compile Include="Unity\JPhysics.cs" />

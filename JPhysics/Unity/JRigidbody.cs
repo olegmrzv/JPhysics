@@ -6,6 +6,8 @@
 
     public abstract class JRigidbody : MonoBehaviour
     {
+        public static float LerpFactor = .3f;
+
         public float Mass = 1f;
         public bool IsStatic;
 
@@ -17,9 +19,7 @@
         Vector3 lastPosition, lp, cp;
         Quaternion lastRotation, lr, cr;
 
-        const float LerpCof = 0.3f;
-
-        void Start()
+        protected virtual void Awake()
         {
             if (IsCompound) return;
             lastPosition = transform.position;
@@ -30,7 +30,7 @@
                 IsStatic = IsStatic,
                 Mass = Mass
             };
-            JPhysics.AddBody(Body, TransformCallback);
+            JPhysics.AddBody(this);
         }
 
         void Update()
@@ -41,26 +41,34 @@
             {
                 cp = pos;
                 cr = rot;
-                JPhysics.CorrectTransform(Body,Correct);
+                JPhysics.Correct(this);
             }
-            lp = transform.position = Vector3.Lerp(pos, lastPosition, LerpCof);
-            lr = transform.rotation = Quaternion.Lerp(rot, lastRotation, LerpCof);
+            lp = transform.position = Vector3.Lerp(pos, lastPosition, LerpFactor);
+            lr = transform.rotation = Quaternion.Lerp(rot, lastRotation, LerpFactor);
         }
 
-        void TransformCallback(Vector3 p, Quaternion r)
+
+        public void TransformUpdate(float timestep)
         {
-            lastPosition = p;
-            lastRotation = r;
+            lock (Body)
+            {
+                lastPosition = Body.Position.ConvertToVector3();
+                lastRotation = Body.Orientation.ConvertToQuaternion();
+            }
         }
 
         void OnDestroy()
         {
-            JPhysics.RemoveBody(Body);
+            JPhysics.RemoveBody(this);
         }
 
-        object[] Correct()
+        public void Correct()
         {
-            return new[] {(object)cp, cr};
+            lock (Body)
+            {
+                Body.Position = cp.ConvertToJVector();
+                Body.Orientation = cr.ConvertToJMatrix();
+            }
         }
     }
 }

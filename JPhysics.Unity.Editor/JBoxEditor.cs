@@ -3,8 +3,8 @@
     using UnityEditor;
     using UnityEngine;
 
-    [CanEditMultipleObjects, CustomEditor(typeof (JBoxCollider))]
-    internal class JBoxColliderEditor : JRigidbodyEditor
+    [CanEditMultipleObjects, CustomEditor(typeof (JBox))]
+    internal class JBoxEditor : JRigidbodyEditor
     {
         readonly BoxEditor boxEditor = new BoxEditor(true);
         SerializedProperty size;
@@ -25,7 +25,7 @@
 
         public void OnSceneGUI()
         {
-            var target = base.target as JBoxCollider;
+            var target = base.target as JBox;
             Undo.SetSnapshotTarget(target, "Modified JBox Collider");
             var center = new Vector3();
             Vector3 size = target.Size;

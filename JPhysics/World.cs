@@ -655,10 +655,10 @@
             arbiterMap.LookUpArbiter(body1, body2, out arbiter);
             if (arbiter == null)
             {
-
                 arbiter = Arbiter.Pool.GetNew();
                 arbiter.body1 = body1;
                 arbiter.body2 = body2;
+
                 arbiterMap.Add(new ArbiterKey(body1, body2), arbiter);
 
                 addedArbiterQueue.Enqueue(arbiter);

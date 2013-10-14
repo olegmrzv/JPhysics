@@ -28,6 +28,7 @@ using JPhysics.Collision.Shapes;
 
 namespace JPhysics.Collision
 {
+    using System.Diagnostics;
     using LinearMath;
 
     /// <summary>
@@ -329,12 +330,12 @@ namespace JPhysics.Collision
                         return hit;
                     }
 
-                    //// Compute the tetrahedron dividing face (v4,v0,v1)
+                    ////// Compute the tetrahedron dividing face (v4,v0,v1)
                     //JVector.Cross(ref v4, ref v1, out temp1);
                     //float d1 = JVector.Dot(ref temp1, ref v0);
 
 
-                    //// Compute the tetrahedron dividing face (v4,v0,v2)
+                    ////// Compute the tetrahedron dividing face (v4,v0,v2)
                     //JVector.Cross(ref v4, ref v2, out temp1);
                     //float d2 = JVector.Dot(ref temp1, ref v0);
 
