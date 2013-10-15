@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BoxEditor.cs" />
+    <Compile Include="JCapsuleEditor.cs" />
     <Compile Include="JTerrainEditor.cs" />
     <Compile Include="JBoxEditor.cs" />
     <Compile Include="JMeshEditor.cs" />

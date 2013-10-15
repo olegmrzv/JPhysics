@@ -85,16 +85,6 @@
             JRigidbody.LerpFactor = settings.Rigidbody.LerpFactor;
         }
 
-        public double LastWorldCalculationTime
-        {
-            get
-            {
-                return World.DebugTimes[0] + World.DebugTimes[1] + World.DebugTimes[2] +
-                       World.DebugTimes[4] + World.DebugTimes[5] + World.DebugTimes[6] + World.DebugTimes[7] +
-                       World.DebugTimes[8] + World.DebugTimes[9];
-            }
-        }
-
         void Logic()
         {
             while (!stopThread)

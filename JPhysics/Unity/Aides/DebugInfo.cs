@@ -1,6 +1,7 @@
 ﻿namespace JPhysics.Unity.Aides
 {
     using UnityEngine;
+    using System.Linq;
 
     [AddComponentMenu("JPhysics/Aides/Debug Info")]
     class DebugInfo : MonoBehaviour
@@ -12,7 +13,7 @@
         {
             if(Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
             if (Input.GetKeyDown(KeyCode.R)) Application.LoadLevel(Application.loadedLevel);
-            lastTime = JPhysics.Instance.LastWorldCalculationTime;
+            lastTime = JPhysics.Instance.World.DebugTimes.Sum();
         }
 
         void OnGUI()

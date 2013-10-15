@@ -1,9 +1,10 @@
 ﻿namespace JPhysics.Unity
 {
     using Collision.Shapes;
+    using UnityEngine;
 
-
-    internal abstract class JCapsule : JRigidbody
+    [AddComponentMenu("JPhysics/Colliders/JCapsule")]
+    public sealed class JCapsule : JRigidbody
     {
         public float Radius = 0.5f, Height = 1f;
 

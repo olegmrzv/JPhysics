@@ -9,7 +9,10 @@
         public static float LerpFactor = .3f;
 
         public float Mass = 1f;
-        public bool IsStatic;
+        public bool IsStatic, UseGravity = true;
+        public DampingType Damping = DampingType.AngularAndLinear;
+
+        public PhysicMaterial Material;
 
         [HideInInspector]
         public bool IsCompound;
@@ -19,17 +22,40 @@
         Vector3 lastPosition, lp, cp;
         Quaternion lastRotation, lr, cr;
 
+        public enum DampingType
+        {
+            None,
+            Angular,
+            Linear,
+            AngularAndLinear
+        };
+
         protected virtual void Awake()
         {
             if (IsCompound) return;
             lastPosition = transform.position;
             Body = new RigidBody(Shape)
-            {
-                Position = transform.position.ConvertToJVector(),
-                Orientation = transform.rotation.ConvertToJMatrix(),
-                IsStatic = IsStatic,
-                Mass = Mass
-            };
+                {
+                    Position = transform.position.ConvertToJVector(),
+                    Orientation = transform.rotation.ConvertToJMatrix(),
+                    IsStatic = IsStatic,
+                    Mass = Mass,
+                    AffectedByGravity = UseGravity,
+                    Damping = (Damping == DampingType.Angular)
+                                  ? RigidBody.DampingType.Angular
+                                  : (Damping == DampingType.Linear)
+                                        ? RigidBody.DampingType.Linear
+                                        : (Damping == DampingType.AngularAndLinear)
+                                              ? RigidBody.DampingType.Linear | RigidBody.DampingType.Angular
+                                              : RigidBody.DampingType.None
+                };
+            if (Material != null)
+                Body.Material = new Dynamics.Material
+                    {
+                        KineticFriction = Material.dynamicFriction,
+                        StaticFriction = Material.staticFriction,
+                        Restitution = Material.bounciness
+                    };
             JPhysics.AddBody(this);
         }
 
@@ -68,6 +94,30 @@
             {
                 Body.Position = cp.ConvertToJVector();
                 Body.Orientation = cr.ConvertToJMatrix();
+            }
+        }
+
+        public void UpdateVariables()
+        {
+            if (Application.isPlaying)
+            {
+                if (Material != null)
+                    Body.Material = new Dynamics.Material
+                    {
+                        KineticFriction = Material.dynamicFriction,
+                        StaticFriction = Material.staticFriction,
+                        Restitution = Material.bounciness
+                    };
+                Body.IsStatic = IsStatic;
+                Body.Mass = Mass;
+                Body.Damping = (Damping == DampingType.Angular)
+                   ? RigidBody.DampingType.Angular
+                   : (Damping == DampingType.Linear)
+                         ? RigidBody.DampingType.Linear
+                         : (Damping == DampingType.AngularAndLinear)
+                               ? RigidBody.DampingType.Linear | RigidBody.DampingType.Angular
+                               : RigidBody.DampingType.None;
+                Body.AffectedByGravity = UseGravity;
             }
         }
     }
