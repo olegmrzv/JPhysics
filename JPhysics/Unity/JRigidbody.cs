@@ -2,7 +2,9 @@
 {
     using Collision.Shapes;
     using Dynamics;
+    using LinearMath;
     using UnityEngine;
+    using Damp = Dynamics.RigidBody.DampingType;
 
     public abstract class JRigidbody : MonoBehaviour
     {
@@ -21,14 +23,6 @@
 
         Vector3 lastPosition, lp, cp;
         Quaternion lastRotation, lr, cr;
-
-        public enum DampingType
-        {
-            None,
-            Angular,
-            Linear,
-            AngularAndLinear
-        };
 
         protected virtual void Awake()
         {
@@ -111,14 +105,22 @@
                 Body.IsStatic = IsStatic;
                 Body.Mass = Mass;
                 Body.Damping = (Damping == DampingType.Angular)
-                   ? RigidBody.DampingType.Angular
+                   ? Damp.Angular
                    : (Damping == DampingType.Linear)
-                         ? RigidBody.DampingType.Linear
+                         ? Damp.Linear
                          : (Damping == DampingType.AngularAndLinear)
-                               ? RigidBody.DampingType.Linear | RigidBody.DampingType.Angular
-                               : RigidBody.DampingType.None;
+                               ? Damp.Linear | Damp.Angular
+                               : Damp.None;
                 Body.AffectedByGravity = UseGravity;
             }
         }
+
+        public enum DampingType
+        {
+            None,
+            Angular,
+            Linear,
+            AngularAndLinear
+        };
     }
 }

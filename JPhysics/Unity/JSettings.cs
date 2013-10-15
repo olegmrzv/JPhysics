@@ -22,7 +22,7 @@
         public class WorldSettings
         {
             public bool AllowDeactivation = true;
-            public float Timestep = .02f;
+            public float Timestep = .025f;
         }
 
         [Serializable]
