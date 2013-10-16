@@ -101,8 +101,10 @@
     <Compile Include="ResourcePool.cs" />
     <Compile Include="Dynamics\SoftBody.cs" />
     <Compile Include="ThreadManager.cs" />
+    <Compile Include="Unity\Aides\OverlapTest.cs" />
     <Compile Include="Unity\Aides\DebugInfo.cs" />
     <Compile Include="Unity\Aides\Hudfps.cs" />
+    <Compile Include="Unity\Aides\TriggerTest.cs" />
     <Compile Include="Unity\JCapsule.cs" />
     <Compile Include="Unity\JBox.cs" />
     <Compile Include="Unity\JCollider.cs" />

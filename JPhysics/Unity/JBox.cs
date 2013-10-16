@@ -3,7 +3,7 @@
     using Collision.Shapes;
     using UnityEngine;
 
-    [AddComponentMenu("JPhysics/Colliders/JBox"), SerializePrivateVariables]
+    [AddComponentMenu("JPhysics/Colliders/JBox")]
     public sealed class JBox : JCollider
     {
         public Vector3 Size
@@ -16,6 +16,7 @@
             }
         }
         
+        [SerializeField]
         private Vector3 size = Vector3.one;
 
         protected override Shape MakeShape()

@@ -1,4 +1,7 @@
-﻿namespace JPhysics.Unity
+﻿using JPhysics.Unity;
+using UnityEngine;
+
+namespace JPhysics.Unity
 {
     using System.Collections.Generic;
     using Collision;
@@ -48,7 +51,6 @@
         JRigidbody rigidbody;
         [SerializeField]
         Shape shape;
-        Shape cloneShape;
 
         JVector position;
         JMatrix orientation;
@@ -57,9 +59,9 @@
         [SerializeField]
         PhysicMaterial material;
 
-
-        void Awake()
+        void OnEnable()
         {
+            shape = MakeShape();
             cacheTransform = transform;
             
             if (Rigidbody == null)
@@ -70,9 +72,6 @@
                 rigidbody.IsStatic = true;
                 rigidbody.hideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
             }
-
-            cloneShape = MakeShape();
-            JPhysics.Instance.PostStep += Loop;
         }
 
         protected virtual void Update()
@@ -81,7 +80,7 @@
             orientation = cacheTransform.rotation.ConvertToJMatrix();
         }
 
-        void Loop()
+        void FixedUpdate()
         {
             if (IsTrigger)
             {
@@ -95,28 +94,44 @@
 
                     otherPosition = body.Key.Position;
                     otherOrientation = body.Key.Orientation;
-                    bool collide = XenoCollide.Detect(cloneShape, body.Key.Shape, ref orientation, ref otherOrientation,
+                    bool collide = XenoCollide.Detect(shape, body.Key.Shape, ref orientation, ref otherOrientation,
                                                         ref position, ref otherPosition, out point, out normal,
                                                         out penetration);
-
+                    var i = new TriggerInfo
+                    {
+                        Body = body.Value,
+                        Point = point,
+                        Normal = normal,
+                        Penetration = penetration
+                    };
                     if (collide && !collidingBodies.ContainsKey(body.Key))
                     {
                         collidingBodies.Add(body.Key, body.Value);
-                        if (TriggerEnter != null) TriggerEnter(body.Value, point, normal, penetration);
+                        if (TriggerEnter != null) TriggerEnter(i);
                     }
                     else if (!collide && collidingBodies.ContainsKey(body.Key))
                     {
                         collidingBodies.Remove(body.Key);
-                        if (TriggerExit != null) TriggerExit(body.Value, point, normal, penetration);
+                        if (TriggerExit != null) TriggerExit(i);
                     }
-                    else if(collide && collidingBodies.ContainsKey(body.Key))
-                        if (TriggerStay != null) TriggerStay(body.Value, point, normal, penetration);
+                    else if (collide && collidingBodies.ContainsKey(body.Key))
+                        if (TriggerStay != null) TriggerStay(i);
                 }
             }
         }
 
         protected abstract Shape MakeShape();
 
-        public delegate void TriggerCollision(JRigidbody body, Vector3 point, Vector3 normal, float penetration);
+
+    }
+
+    public delegate void TriggerCollision(TriggerInfo info);
+
+    public class TriggerInfo
+    {
+        public JRigidbody Body;
+        public Vector3 Point;
+        public Vector3 Normal;
+        public float Penetration;
     }
 }

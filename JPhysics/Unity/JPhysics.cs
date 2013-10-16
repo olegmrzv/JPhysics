@@ -231,6 +231,7 @@
             lock (Bodies) if (!Bodies.ContainsValue(body)) Bodies.Remove(body.Body);
         }
 
+        //TODO make this threadsafe. Dangerous code
         public static bool Raycast(Vector3 origin, Vector3 direction, out JRigidbody body, out Vector3 normal, out float distance)
         {
             body = null;

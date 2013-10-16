@@ -57,8 +57,9 @@
             }
         }
 
-        public bool IsCompound;
-        public RigidBody Body;
+        public bool IsCompound { get; internal set; }
+        public RigidBody Body { get; private set; }
+        public JCollider Collider { get { return GetComponent<JCollider>(); } }
 
         [SerializeField]
         float mass = 1f;
@@ -154,7 +155,7 @@
                 JPhysics.RemoveBody(this);
         }
 
-        public void Correct()
+        internal void Correct()
         {
             lock (Body)
             {

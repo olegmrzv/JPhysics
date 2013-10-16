@@ -3,7 +3,7 @@
     using Collision.Shapes;
     using UnityEngine;
 
-    [AddComponentMenu("JPhysics/Colliders/JCapsule"), SerializePrivateVariables]
+    [AddComponentMenu("JPhysics/Colliders/JCapsule")]
     public sealed class JCapsule : JCollider
     {
         public float Radius
