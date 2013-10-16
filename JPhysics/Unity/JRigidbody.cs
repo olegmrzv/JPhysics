@@ -6,80 +6,152 @@
     using UnityEngine;
     using Damp = Dynamics.RigidBody.DampingType;
 
-    public abstract class JRigidbody : MonoBehaviour
+    [AddComponentMenu("JPhysics/JRigidbody")]
+    public sealed class JRigidbody : MonoBehaviour
     {
         public static float LerpFactor = .3f;
 
-        public float Mass = 1f;
-        public bool IsStatic, UseGravity = true;
-        public DampingType Damping = DampingType.AngularAndLinear;
+        public float Mass
+        {
+            get { return mass; }
+            set
+            {
+                mass = value;
+                if (Body != null) Body.Mass = mass;
+            }
+        }
 
-        public PhysicMaterial Material;
+        public bool IsStatic
+        {
+            get { return isStatic; }
+            set
+            {
+                isStatic = value;
+                if (Body != null) Body.IsStatic = isStatic;
+            }
+        }
 
-        [HideInInspector]
+        public bool UseGravity
+        {
+            get { return useGravity; }
+            set
+            {
+                useGravity = value;
+                if (Body != null) Body.AffectedByGravity = useGravity;
+            }
+        }
+
+        public DampingType Damping
+        {
+            get { return damping; }
+            set
+            {
+                damping = value;
+                if(Body != null) Body.Damping = (Damping == DampingType.Angular)
+                                   ? Damp.Angular
+                                   : (Damping == DampingType.Linear)
+                                         ? Damp.Linear
+                                         : (Damping == DampingType.AngularAndLinear)
+                                               ? Damp.Linear | Damp.Angular
+                                               : Damp.None;
+            }
+        }
+
         public bool IsCompound;
         public RigidBody Body;
-        public Shape Shape;
+
+        [SerializeField]
+        float mass = 1f;
+        [SerializeField]
+        bool isStatic, useGravity = true;
+        [SerializeField]
+        DampingType damping = DampingType.AngularAndLinear;
+        [SerializeField]
+        JCollider collider;
 
         Vector3 lastPosition, lp, cp;
         Quaternion lastRotation, lr, cr;
 
-        protected virtual void Awake()
+        void OnEnable()
         {
             if (IsCompound) return;
+            collider = GetComponent<JCollider>();
+            if (collider == null)
+            {
+                Debug.LogWarning("No Collider Found!");
+                enabled = false;
+                return;
+            }
+            if (collider.IsTrigger)
+            {
+                enabled = false;
+                return;
+            }
             lastPosition = transform.position;
-            Body = new RigidBody(Shape)
+            Body = new RigidBody(collider.Shape)
                 {
                     Position = transform.position.ConvertToJVector(),
                     Orientation = transform.rotation.ConvertToJMatrix(),
-                    IsStatic = IsStatic,
-                    Mass = Mass,
-                    AffectedByGravity = UseGravity,
+                    IsStatic = isStatic,
+                    Mass = mass,
+
+                    AffectedByGravity = useGravity,
                     Damping = (Damping == DampingType.Angular)
-                                  ? RigidBody.DampingType.Angular
+                                  ? Damp.Angular
                                   : (Damping == DampingType.Linear)
-                                        ? RigidBody.DampingType.Linear
+                                        ? Damp.Linear
                                         : (Damping == DampingType.AngularAndLinear)
-                                              ? RigidBody.DampingType.Linear | RigidBody.DampingType.Angular
-                                              : RigidBody.DampingType.None
+                                              ? Damp.Linear | Damp.Angular
+                                              : Damp.None
                 };
-            if (Material != null)
+            var m = collider.Material;
+            if (m != null)
                 Body.Material = new Dynamics.Material
                     {
-                        KineticFriction = Material.dynamicFriction,
-                        StaticFriction = Material.staticFriction,
-                        Restitution = Material.bounciness
+                        KineticFriction = m.dynamicFriction,
+                        StaticFriction = m.staticFriction,
+                        Restitution = m.bounciness
                     };
             JPhysics.AddBody(this);
         }
 
         void Update()
         {
-            var pos = transform.position;
-            var rot = transform.rotation;
-            if (lp != pos || lr != rot)
+            if (!collider.IsTrigger)
             {
-                cp = pos;
-                cr = rot;
-                JPhysics.Correct(this);
+                var pos = transform.position;
+                var rot = transform.rotation;
+                if (lp != pos || lr != rot)
+                {
+                    cp = pos;
+                    cr = rot;
+                    JPhysics.Correct(this);
+                }
+                lp = transform.position = Vector3.Lerp(pos, lastPosition, LerpFactor);
+                lr = transform.rotation = Quaternion.Lerp(rot, lastRotation, LerpFactor);
             }
-            lp = transform.position = Vector3.Lerp(pos, lastPosition, LerpFactor);
-            lr = transform.rotation = Quaternion.Lerp(rot, lastRotation, LerpFactor);
+            else enabled = false;
         }
-
 
         public void TransformUpdate(float timestep)
         {
             lock (Body)
             {
-                lastPosition = Body.Position.ConvertToVector3();
-                lastRotation = Body.Orientation.ConvertToQuaternion();
+                lastPosition = Body.Position;
+                lastRotation = Body.Orientation;
             }
+        }
+
+        void OnDisable()
+        {
+            if (Body != null)
+                JPhysics.RemoveBody(this);
         }
 
         void OnDestroy()
         {
-            JPhysics.RemoveBody(this);
+            if (Body != null)
+                JPhysics.RemoveBody(this);
         }
 
         public void Correct()
@@ -95,12 +167,13 @@
         {
             if (Application.isPlaying)
             {
-                if (Material != null)
+                var m = collider.Material;
+                if (m != null)
                     Body.Material = new Dynamics.Material
                     {
-                        KineticFriction = Material.dynamicFriction,
-                        StaticFriction = Material.staticFriction,
-                        Restitution = Material.bounciness
+                        KineticFriction = m.dynamicFriction,
+                        StaticFriction = m.staticFriction,
+                        Restitution = m.bounciness
                     };
                 Body.IsStatic = IsStatic;
                 Body.Mass = Mass;
@@ -113,6 +186,36 @@
                                : Damp.None;
                 Body.AffectedByGravity = UseGravity;
             }
+        }
+
+        public void AddForce(float x, float y, float z)
+        {
+            Body.AddForce(new JVector(x, y, z));
+        }
+
+        public void AddForce(Vector3 force)
+        {
+            Body.AddForce(force.ConvertToJVector());
+        }
+
+        public void AddForceAtPosition(Vector3 force, Vector3 position)
+        {
+            Body.AddForce(force.ConvertToJVector(), position.ConvertToJVector());
+        }
+
+        public void AddTorque(Vector3 torque)
+        {
+            Body.AddTorque(torque.ConvertToJVector());
+        }
+
+        public void AddImpulse(Vector3 impulse)
+        {
+            Body.ApplyImpulse(impulse.ConvertToJVector());
+        }
+
+        public void AddImpulse(Vector3 impulse, Vector3 relativePosition)
+        {
+            Body.ApplyImpulse(impulse.ConvertToJVector(), relativePosition.ConvertToJVector());
         }
 
         public enum DampingType

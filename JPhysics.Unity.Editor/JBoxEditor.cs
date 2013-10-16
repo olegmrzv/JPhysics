@@ -4,7 +4,7 @@
     using UnityEngine;
 
     [CanEditMultipleObjects, CustomEditor(typeof (JBox))]
-    internal class JBoxEditor : JRigidbodyEditor
+    internal class JBoxEditor : JColliderEditor
     {
         readonly BoxEditor boxEditor = new BoxEditor(true);
         SerializedProperty size;
@@ -12,7 +12,7 @@
         public override void OnEnable()
         {
             base.OnEnable();
-            size = serializedObject.FindProperty("Size");
+            size = serializedObject.FindProperty("size");
         }
 
         public override void OnInspectorGUI()

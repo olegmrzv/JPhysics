@@ -188,7 +188,8 @@
             bool result = false;
 
             // TODO: This can be done better in CollisionSystemPersistenSAP
-            foreach (IBroadphaseEntity e in bodyList)
+            var bl = bodyList.ToArray();
+            foreach (IBroadphaseEntity e in bl)
             {
                 if (e is SoftBody)
                 {
@@ -211,7 +212,7 @@
                 {
                     RigidBody b = e as RigidBody;
 
-                    if (this.Raycast(b, rayOrigin, rayDirection, out tempNormal, out tempFraction))
+                    if (Raycast(b, rayOrigin, rayDirection, out tempNormal, out tempFraction))
                     {
                         if (tempFraction < fraction && (raycast == null || raycast(b, tempNormal, tempFraction)))
                         {
@@ -286,13 +287,8 @@
                 ms.ReturnWorkingClone();
                 return multiShapeCollides;
             }
-            else
-            {
-                return (GJKCollide.Raycast(body.Shape, ref body.orientation, ref body.invOrientation, ref body.position,
-                    ref rayOrigin, ref rayDirection, out fraction, out normal));
-            }
-
-
+            return (GJKCollide.Raycast(body.Shape, ref body.orientation, ref body.invOrientation, ref body.position,
+                                       ref rayOrigin, ref rayDirection, out fraction, out normal));
         }
         #endregion
 

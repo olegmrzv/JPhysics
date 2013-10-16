@@ -28,6 +28,8 @@ using JPhysics.Collision.Shapes;
 
 namespace JPhysics.LinearMath
 {
+    using UnityEngine;
+
     /// <summary>
     /// A vector structure. Member of the math 
     /// namespace, so every method has it's 'by reference' equivalent
@@ -712,5 +714,9 @@ namespace JPhysics.LinearMath
         }
         #endregion
 
+        public static implicit operator Vector3(JVector v)
+        {
+            return Unity.JExtendens.ConvertToVector3(v);
+        }
     }
 }

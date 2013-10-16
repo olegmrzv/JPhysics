@@ -4,14 +4,14 @@
     using UnityEngine;
 
     [CustomEditor(typeof(JSphere)), CanEditMultipleObjects]
-    internal class JSphereEditor : JRigidbodyEditor
+    internal class JSphereEditor : JColliderEditor
     {
         private SerializedProperty radius;
 
         public override void OnEnable()
         {
             base.OnEnable();
-            radius = serializedObject.FindProperty("Radius");
+            radius = serializedObject.FindProperty("radius");
         }
 
         public override void OnInspectorGUI()

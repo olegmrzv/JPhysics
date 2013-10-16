@@ -3,7 +3,7 @@
     using UnityEditor;
 
     [CustomEditor(typeof(JTerrain)), CanEditMultipleObjects]
-    internal class JTerrainEditor : JRigidbodyEditor
+    internal class JTerrainEditor : JColliderEditor
     {
     }
 }

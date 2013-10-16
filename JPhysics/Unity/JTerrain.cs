@@ -3,16 +3,10 @@
     using Collision.Shapes;
     using UnityEngine;
 
-    [AddComponentMenu("JPhysics/Colliders/JTerrain")]
-    [RequireComponent(typeof(TerrainCollider))]
-    public class JTerrain : JRigidbody
+    [AddComponentMenu("JPhysics/Colliders/JTerrain"), RequireComponent(typeof(TerrainCollider))]
+    public class JTerrain : JCollider
     {
-        public JTerrain()
-        {
-            IsStatic = true;
-        }
-
-        protected override void Awake()
+        protected override Shape MakeShape()
         {
             var data = GetComponent<TerrainCollider>().terrainData;
             var hs = data.GetHeights(0, 0, data.heightmapWidth, data.heightmapHeight);
@@ -23,8 +17,7 @@
                     hs[i0, i1] *= (data.heightmapHeight / data.heightmapResolution) * data.heightmapScale.y;
                     temp[i1, i0] = hs[i0, i1];
                 }
-            Shape = new TerrainShape(temp, data.heightmapScale.x, data.heightmapScale.z);
-            base.Awake();
+            return new TerrainShape(temp, data.heightmapScale.x, data.heightmapScale.z);
         }
     }
 }

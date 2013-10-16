@@ -4,14 +4,24 @@
     using UnityEngine;
 
     [AddComponentMenu("JPhysics/Colliders/JSphere")]
-    public class JSphere : JRigidbody
+    public class JSphere : JCollider
     {
-        public float Radius = 0.5f;
-
-        protected override void Awake()
+        public float Radius
         {
-            Shape = new SphereShape(Radius);
-            base.Awake();
+            get { return radius; }
+            set
+            {
+                radius = value;
+                ((SphereShape) Shape).Radius = radius;
+            }
+        }
+
+        [SerializeField]
+        float radius = .5f;
+
+        protected override Shape MakeShape()
+        {
+            return new SphereShape(radius);
         }
     }
 }

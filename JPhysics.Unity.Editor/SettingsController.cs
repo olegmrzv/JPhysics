@@ -14,7 +14,25 @@
             EditorApplication.projectWindowChanged += ExistSettings;
             EditorApplication.hierarchyWindowChanged += ExistSettings;
             EditorApplication.playmodeStateChanged += ExistSettings;
+            EditorApplication.update += CheckPause;
         }
+
+        private static void CheckPause()
+        {
+            if (JPhysics.IsInstance)
+            {
+                var i = JPhysics.Instance;
+                if (EditorApplication.isPlaying)
+                {
+                    if (i.IsPaused != EditorApplication.isPaused)
+                    {
+                        i.IsPaused = !i.IsPaused;
+                    }
+                }
+                else Object.DestroyImmediate(i);
+            }
+        }
+
 
         private static void ExistSettings()
         {

@@ -454,7 +454,8 @@ namespace JPhysics.Collision
             bool result = false;
 
             // TODO: This can be done better in CollisionSystemPersistenSAP
-            foreach (IBroadphaseEntity e in bodyList)
+            var bl = bodyList.ToArray();
+            foreach (IBroadphaseEntity e in bl)
             {
                 if (e is SoftBody)
                 {

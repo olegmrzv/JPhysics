@@ -105,6 +105,7 @@
     <Compile Include="Unity\Aides\Hudfps.cs" />
     <Compile Include="Unity\JCapsule.cs" />
     <Compile Include="Unity\JBox.cs" />
+    <Compile Include="Unity\JCollider.cs" />
     <Compile Include="Unity\JExtendens.cs" />
     <Compile Include="Unity\JMesh.cs" />
     <Compile Include="Unity\JPhysics.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="Unity\JSettings.cs" />
     <Compile Include="Unity\JSphere.cs" />
     <Compile Include="Unity\JTerrain.cs" />
+    <Compile Include="Unity\Test.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

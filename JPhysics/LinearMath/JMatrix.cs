@@ -605,5 +605,10 @@ namespace JPhysics.LinearMath
 
         #endregion
 
+
+        public static implicit operator UnityEngine.Quaternion(JMatrix m)
+        {
+            return Unity.JExtendens.ConvertToQuaternion(m);
+        }
     }
 }

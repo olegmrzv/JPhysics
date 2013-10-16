@@ -4,15 +4,15 @@
     using UnityEngine;
 
     [CanEditMultipleObjects, CustomEditor(typeof(JCapsule))]
-    class JCapsuleEditor : JRigidbodyEditor
+    class JCapsuleEditor : JColliderEditor
     {
         SerializedProperty radius, height, direction;
 
         public override void OnEnable()
         {
             base.OnEnable();
-            radius = serializedObject.FindProperty("Radius");
-            height = serializedObject.FindProperty("Height");
+            radius = serializedObject.FindProperty("radius");
+            height = serializedObject.FindProperty("height");
             //direction = serializedObject.FindProperty("Direction");
         }
 

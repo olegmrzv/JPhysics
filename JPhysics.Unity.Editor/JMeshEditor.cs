@@ -4,7 +4,7 @@
     using UnityEngine;
 
     [CustomEditor(typeof(JMesh)), CanEditMultipleObjects]
-    internal class JMeshEditor : JRigidbodyEditor
+    internal class JMeshEditor : JColliderEditor
     {
         private SerializedProperty convex;
 
